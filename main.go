@@ -1,8 +1,13 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/nomadcoders/nomadcoin/person"
+)
 
 func main() {
-	fmt.Println("Welcome to Nomadcoin!")
-	fmt.Println("블록체인에 관련해서 학습을 위한 파일럿.")
+	nico := person.Person{}
+	nico.SetDetails("nico", 20)
+	fmt.Println("Main 'nico'", nico)
 }
