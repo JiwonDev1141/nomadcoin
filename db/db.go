@@ -1,14 +1,16 @@
 package db
 
 import (
+	"fmt"
+
 	"github.com/boltdb/bolt"
 	"github.com/nomadcoders/nomadcoin/utils"
 )
 
 const (
-	dbName      = "blockchain.db"
-	dataBucket  = "data"
-	blockBucket = "blocks"
+	dbName       = "blockchain.db"
+	dataBucket   = "data"
+	blocksBucket = "blocks"
 )
 
 var db *bolt.DB
@@ -22,11 +24,30 @@ func DB() *bolt.DB {
 			_, err := t.CreateBucketIfNotExists([]byte(dataBucket))
 			utils.HandleErr(err)
 
-			_, err = t.CreateBucketIfNotExists([]byte(blockBucket))
+			_, err = t.CreateBucketIfNotExists([]byte(blocksBucket))
 			return err
 
 		})
 		utils.HandleErr(err)
 	}
 	return db
+}
+
+func SaveBlock(hash string, data []byte) {
+	fmt.Printf("Saving Block %s\nData: %b\n", hash, data)
+	err := DB().Update(func(t *bolt.Tx) error {
+		bucket := t.Bucket([]byte(blocksBucket))
+		err := bucket.Put([]byte(hash), data)
+		return err
+	})
+	utils.HandleErr(err)
+}
+
+func SaveBlockChain(data []byte) {
+	err := DB().Update(func(t *bolt.Tx) error {
+		bucket := t.Bucket([]byte(dataBucket))
+		err := bucket.Put([]byte("checkpoint"), data)
+		return err
+	})
+	utils.HandleErr(err)
 }
