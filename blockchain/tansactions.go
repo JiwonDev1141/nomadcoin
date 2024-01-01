@@ -17,7 +17,7 @@ type mempool struct {
 var Mempool *mempool = &mempool{}
 
 type Tx struct {
-	Id        string   `json:"id"`
+	ID        string   `json:"id"`
 	Timestamp int      `json:"timestamp"`
 	TxIns     []*TxIn  `json:"txIns"`
 	TxOuts    []*TxOut `json:"txOuts"`
@@ -35,6 +35,12 @@ type TxIn struct {
 
 type TxOut struct {
 	Owner  string
+	Amount int
+}
+
+type UTxOut struct {
+	TxID   string
+	Index  int
 	Amount int
 }
 
